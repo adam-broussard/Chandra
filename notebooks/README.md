@@ -1,0 +1,1 @@
+This is where all of our analysis notebooks will go!  This folder should also have a `data` folder in it that contains our dataset and any intermediate data products like preprocessed data.
