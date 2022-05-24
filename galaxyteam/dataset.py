@@ -7,7 +7,7 @@ import os
 import kaggle
 
 
-def download_dataset(savedir='data/'):
+def download_dataset(savedir='./data/'):
     """
     Creates a data directory if it doesn't exist and downloads the dataset
     to that directory.
@@ -16,11 +16,11 @@ def download_dataset(savedir='data/'):
         savedir (str): The directory where the data will be saved
     """
 
-    print(f'Downloading data csv to "{savedir}"...', end='')
+    print(f'Downloading images to "{os.path.abspath(savedir)}"...', end='')
     os.makedirs(savedir, exist_ok=True)
 
     kaggle.api.authenticate()
     kaggle.api.dataset_download_files('paultimothymooney/chest-xray-pneumonia',
-                                      path=savedir, unzip=True)
+                                      path=savedir)
 
     print('done.')
