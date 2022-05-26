@@ -133,4 +133,3 @@ dmypy.json
 
 # vscode
 .vscode/
-data/chest-xray-pneumonia/chest_xray/__MACOSX/chest_xray/test/NORMAL/._IM-0001-0001.jpeg
