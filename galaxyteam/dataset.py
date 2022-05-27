@@ -21,6 +21,6 @@ def download_dataset(savedir='./data/'):
 
     kaggle.api.authenticate()
     kaggle.api.dataset_download_files('paultimothymooney/chest-xray-pneumonia',
-                                      path=savedir)
+                                      path=savedir, unzip=True)
 
     print('done.')
