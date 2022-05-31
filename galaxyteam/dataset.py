@@ -64,7 +64,7 @@ def resize_image(read_fp, save_fp, target_shape=(550, 625, 3),
 
     resized = resize(image, (int(image.shape[0]/resize_factor),
                              int(image.shape[1]/resize_factor),
-                             3), anti_alias=anti_alias)
+                             3), anti_aliasing=anti_alias)
 
     # Cropping
     crop1 = (resized.shape[crop_axis] - target_shape[crop_axis])//2
