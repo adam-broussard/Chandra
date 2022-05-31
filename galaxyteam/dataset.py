@@ -28,7 +28,7 @@ def download_dataset(savedir='./data/'):
     print('done.')
 
 
-def resize_image(image, target_shape=(550, 625, 3),
+def resize_image(image, target_shape=(224, 224, 3),
                  anti_alias=False):
     """
     Resizes an image, crops it, converts it to uint8, and returns it.
@@ -54,8 +54,8 @@ def resize_image(image, target_shape=(550, 625, 3),
     # Resizing
     resize_factor = image.shape[downscale_axis]/target_shape[downscale_axis]
 
-    resized = resize(image, (int(image.shape[0]/resize_factor),
-                             int(image.shape[1]/resize_factor),
+    resized = resize(image, (round(image.shape[0]/resize_factor),
+                             round(image.shape[1]/resize_factor),
                              3), anti_aliasing=anti_alias)
 
     # Cropping
