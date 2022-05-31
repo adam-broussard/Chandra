@@ -5,8 +5,6 @@ analysis and cleaning it.
 
 import os
 import kaggle
-from skimage.io import imread, imsave
-from skimage import img_as_ubyte
 from skimage.util import crop
 from skimage.transform import resize
 
