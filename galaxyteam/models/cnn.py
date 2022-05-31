@@ -44,7 +44,8 @@ def build_cnn():
                         Dense(1, activation='sigmoid')])
 
     model.compile(loss=BinaryCrossentropy(),
-                  optimizer=Adam())
+                  optimizer=Adam(),
+                  metrics=[tf.keras.metrics.Recall()])
     return model
 
 
@@ -132,6 +133,7 @@ def train_cnn(epochs=25, batch_size=32, val_frac=0.2,
 
     model = build_cnn()
 
-    history = model.fit_generator(train_dataset, epochs=epochs, verbose=1)
+    history = model.fit(train_dataset, epochs=epochs, verbose=1,
+                        validation_data=val_dataset)
 
     return history, model
