@@ -26,8 +26,8 @@ setup(
                       'tqdm',
                       'tensorflow',
                       'keras',
-                      'matplotlib'
-                      ],
+                      'matplotlib',
+                      'skimage'],
 
     classifiers=[
         'Development Status :: 1 - Planning',
