@@ -30,23 +30,17 @@ def download_dataset(savedir='./data/'):
     print('done.')
 
 
-def resize_image(read_fp, save_fp, target_shape=(550, 625, 3),
+def resize_image(image, target_shape=(550, 625, 3),
                  anti_alias=False):
     """
-    Reads an image, converts it to uint8, resizes it, and saves it to file.
+    Resizes an image, crops it, converts it to uint8, and returns it.
 
     Args:
-        read_fp (string): The filepath to read the image from.
-        save_fp (string): The filepath to save the image to.
+        image (np.ndarray): An array containing image information
         target_shape (iter): The dimensions of the final saved image.
         anti_alias (bool): Whether or not to implement gaussian smoothing when
             shrinking the images to prevent aliasing
     """
-
-    # Make the save folder if it doesn't already exist.
-    os.makedirs(os.path.dirname(save_fp), exist_ok=True)
-
-    image = imread(read_fp)
 
     # Shrink the image such that one axis is the correct size and then crop the
     # long axis
@@ -79,5 +73,4 @@ def resize_image(read_fp, save_fp, target_shape=(550, 625, 3),
 
     cropped = crop(resized, crop_list)
 
-    # Save to file
-    imsave(save_fp, img_as_ubyte(cropped))
+    return cropped
