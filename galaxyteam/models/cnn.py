@@ -10,6 +10,7 @@ from tqdm import tqdm
 from ..dataset import resize_image
 from matplotlib import image
 from PIL import UnidentifiedImageError
+from sklearn.model_selection import train_test_split
 # pylint: disable=[E0611,E0401]
 from tensorflow.keras.models import Sequential, model_from_yaml
 from tensorflow.keras.layers import (Dense, Dropout, Flatten, Conv2D, Lambda,
@@ -116,13 +117,12 @@ def create_dataset(filenames, is_pneumonia, shuffle=False, batch_size=32):
 def train_cnn(epochs=25, batch_size=32, val_frac=0.2,
               train_info_file_path='./data/preprocessed/train_metadata.csv'):
 
-    train_data = pd.read_csv(train_info_file_path)
-    val_data = train_data.sample(frac=val_frac, random_state=54932)
-    train_data = train_data.drop(val_data.index)
+    full_train = pd.read_csv(train_info_file_path)
 
-    # Shuffle the data
-    train_data = train_data.sample(frac=1, random_state=2974)
-    val_data = val_data.sample(frac=1, random_state=2143)
+    train_data, val_data = train_test_split(full_train, test_size=0.2,
+                                            shuffle=True,
+                                            stratify=full_train.is_pneumonia,
+                                            random_state=9473)
 
     # Create Tensorflow datasets
     train_dataset = create_dataset(train_data.resized_file_path,
