@@ -7,7 +7,7 @@ import pandas as pd
 from sklearn.model_selection import train_test_split
 # pylint: disable=[E0611,E0401]
 from tensorflow.keras.models import Sequential
-from tensorflow.keras.layers import (Dense, Dropout, Flatten, Conv2D, Lambda,
+from tensorflow.keras.layers import (Dense, Dropout, Flatten, Conv2D,
                                      MaxPooling2D)
 from tensorflow.keras.losses import BinaryCrossentropy
 from tensorflow.keras.optimizers import Adam
