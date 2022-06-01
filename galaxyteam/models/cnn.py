@@ -45,7 +45,8 @@ def build_cnn():
 
     model.compile(loss=BinaryCrossentropy(),
                   optimizer=Adam(),
-                  metrics=[tf.keras.metrics.Recall()])
+                  metrics=[tf.keras.metrics.Recall(),
+                           tf.keras.metrics.Precision()])
     return model
 
 
