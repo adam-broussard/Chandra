@@ -27,7 +27,8 @@ setup(
                       'tensorflow',
                       'keras',
                       'matplotlib',
-                      'scikit-image'],
+                      'scikit-image',
+                      'scikit-learn'],
 
     classifiers=[
         'Development Status :: 1 - Planning',
