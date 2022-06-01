@@ -3,16 +3,10 @@ Holds functions for building, training, saving, and reading convolutional
 neural network models.
 '''
 
-import json
-import os
 import pandas as pd
-from tqdm import tqdm
-from ..dataset import resize_image
-from matplotlib import image
-from PIL import UnidentifiedImageError
 from sklearn.model_selection import train_test_split
 # pylint: disable=[E0611,E0401]
-from tensorflow.keras.models import Sequential, model_from_yaml
+from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import (Dense, Dropout, Flatten, Conv2D, Lambda,
                                      MaxPooling2D)
 from tensorflow.keras.losses import BinaryCrossentropy
@@ -116,10 +110,23 @@ def create_dataset(filenames, is_pneumonia, shuffle=False, batch_size=32):
 
 def train_cnn(epochs=25, batch_size=32, val_frac=0.2,
               train_info_file_path='./data/preprocessed/train_metadata.csv'):
+    """
+    Generates the necessary datasets and trains the CNN.
+
+    Args:
+        epochs (int): Number of training expochs
+        batch_size(int): Size of mini-batches used for training
+        val_frac (float): Fraction of the training set to use for validation
+        train_info_file_path (string): Location of the training metadata file
+
+    Returns:
+        history (Tensorflow.History): The training history
+        model (Tensorflow.Model): The trained model
+    """
 
     full_train = pd.read_csv(train_info_file_path)
 
-    train_data, val_data = train_test_split(full_train, test_size=0.2,
+    train_data, val_data = train_test_split(full_train, test_size=val_frac,
                                             shuffle=True,
                                             stratify=full_train.is_pneumonia,
                                             random_state=9473)
