@@ -4,12 +4,13 @@ analysis and cleaning it.
 """
 
 import os
+from pathlib import Path
 import kaggle
 from skimage.util import crop
 from skimage.transform import resize
 
 
-def download_dataset(savedir='./data/'):
+def download_dataset(savedir=Path('data')):
     """
     Creates a data directory if it doesn't exist and downloads the dataset
     to that directory.

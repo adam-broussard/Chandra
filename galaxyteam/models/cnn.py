@@ -3,6 +3,7 @@ Holds functions for building, training, saving, and reading convolutional
 neural network models.
 '''
 
+from pathlib import Path
 import pandas as pd
 from sklearn.model_selection import train_test_split
 # pylint: disable=[E0611,E0401]
@@ -109,7 +110,9 @@ def create_dataset(filenames, is_pneumonia, shuffle=False, batch_size=32):
 
 
 def train_cnn(epochs=25, batch_size=32, val_frac=0.2,
-              train_info_file_path='./data/preprocessed/train_metadata.csv'):
+              train_info_file_path=(Path('data')
+                                    .joinpath('preprocessed',
+                                              'train_metadata.csv'))):
     """
     Generates the necessary datasets and trains the CNN.
 
@@ -117,7 +120,8 @@ def train_cnn(epochs=25, batch_size=32, val_frac=0.2,
         epochs (int): Number of training expochs
         batch_size(int): Size of mini-batches used for training
         val_frac (float): Fraction of the training set to use for validation
-        train_info_file_path (string): Location of the training metadata file
+        train_info_file_path (pathlib.Path or string): Location of the training
+            metadata file
 
     Returns:
         history (Tensorflow.History): The training history
