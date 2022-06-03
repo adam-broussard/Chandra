@@ -21,7 +21,7 @@ class F1_Score(tf.keras.metrics.Metric):
         self.precision_fn = Precision(thresholds=0.5)
         self.recall_fn = Recall(thresholds=0.5)
 
-    def update_state(self, y_true, y_pred):
+    def update_state(self, y_true, y_pred, sample_weight=None):
         """
         Update the object state
 
@@ -29,8 +29,8 @@ class F1_Score(tf.keras.metrics.Metric):
             y_true (iterable): The true target values
             y_pred (iterable): The predicted target values
         """
-        p = self.precision_fn(y_true, y_pred)
-        r = self.recall_fn(y_true, y_pred)
+        p = self.precision_fn(y_true, y_pred, sample_weight=sample_weight)
+        r = self.recall_fn(y_true, y_pred, sample_weight=sample_weight)
         # since f1 is a variable, we use assign
         self.f1.assign(2 * ((p * r) / (p + r + 1e-6)))
 
