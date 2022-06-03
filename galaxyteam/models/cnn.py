@@ -14,10 +14,10 @@ from tensorflow.keras.layers import (Dense, Dropout, Flatten, Conv2D,
 from tensorflow.keras.losses import BinaryCrossentropy
 from tensorflow.keras.optimizers import Adam
 from tensorflow.keras.optimizers.schedules import ExponentialDecay
-from ..metrics import F1_Score
 from tensorflow.keras.metrics import Recall, Precision
 import tensorflow as tf
 # pylint: enable-[E0611,E0401]
+from ..metrics import F1_Score
 
 
 def build_cnn():
