@@ -156,7 +156,7 @@ def train_cnn(epochs=1000, batch_size=32, val_frac=0.2,
     model = build_cnn()
 
     ES = EarlyStopping(monitor='val_f1_score',
-                       patience=10,
+                       patience=20,
                        restore_best_weights=True,
                        mode='max',
                        verbose=1)
