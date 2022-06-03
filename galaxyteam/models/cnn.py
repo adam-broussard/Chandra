@@ -109,6 +109,41 @@ def create_dataset(filenames, is_pneumonia, shuffle=False, batch_size=32):
     return dataset
 
 
+def get_tf_train_val(train_info_file_path, batch_size=128, val_frac=0.2):
+    """
+    Returns tensorflow dataset objects for training and validation.
+
+    Args:
+        train_info_file_path (pathlib.Path or string): Location of the training
+            metadata file
+        batch_size(int): Size of mini-batches used for training
+        val_frac (float): Fraction of the training set to use for validation
+
+    Returns:
+        train_dataset (tf.data.Dataset): A dataset containing the image and
+            pneumonia data for training
+        val_dataset (tf.data.Dataset): A dataset containing the image and
+            pneumonia data for validation
+    """
+
+    full_train = pd.read_csv(train_info_file_path)
+
+    train_data, val_data = train_test_split(full_train, test_size=val_frac,
+                                            shuffle=True,
+                                            stratify=full_train.is_pneumonia,
+                                            random_state=9473)
+
+    # Create Tensorflow datasets
+    train_dataset = create_dataset(train_data.resized_file_path,
+                                   train_data.is_pneumonia,
+                                   batch_size=batch_size)
+    val_dataset = create_dataset(val_data.resized_file_path,
+                                 val_data.is_pneumonia,
+                                 batch_size=batch_size)
+
+    return train_dataset, val_dataset
+
+
 def train_cnn(epochs=25, batch_size=32, val_frac=0.2,
               train_info_file_path=(Path('data')
                                     .joinpath('preprocessed',
@@ -128,20 +163,9 @@ def train_cnn(epochs=25, batch_size=32, val_frac=0.2,
         model (Tensorflow.Model): The trained model
     """
 
-    full_train = pd.read_csv(train_info_file_path)
-
-    train_data, val_data = train_test_split(full_train, test_size=val_frac,
-                                            shuffle=True,
-                                            stratify=full_train.is_pneumonia,
-                                            random_state=9473)
-
-    # Create Tensorflow datasets
-    train_dataset = create_dataset(train_data.resized_file_path,
-                                   train_data.is_pneumonia,
-                                   batch_size=batch_size)
-    val_dataset = create_dataset(val_data.resized_file_path,
-                                 val_data.is_pneumonia,
-                                 batch_size=batch_size)
+    train_dataset, val_dataset = get_tf_train_val(train_info_file_path,
+                                                  batch_size=batch_size,
+                                                  val_frac=val_frac)
 
     model = build_cnn()
 
