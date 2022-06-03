@@ -133,3 +133,5 @@ dmypy.json
 
 # vscode
 .vscode/
+notebooks/TL_v1/variables/variables.data-00000-of-00001
+.gitattributes
