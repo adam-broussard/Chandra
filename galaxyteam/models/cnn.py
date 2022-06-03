@@ -13,6 +13,7 @@ from tensorflow.keras.layers import (Dense, Dropout, Flatten, Conv2D,
                                      MaxPooling2D)
 from tensorflow.keras.losses import BinaryCrossentropy
 from tensorflow.keras.optimizers import Adam
+from tensorflow.keras.optimizers.schedules import ExponentialDecay
 from ..metrics import F1_Score
 from tensorflow.keras.metrics import Recall, Precision
 import tensorflow as tf
@@ -42,8 +43,13 @@ def build_cnn():
                         Dropout(0.5),
                         Dense(1, activation='sigmoid')])
 
+    lr_schedule = ExponentialDecay(
+        0.0002,
+        decay_steps=30,
+        decay_rate=0.95)
+
     model.compile(loss=BinaryCrossentropy(),
-                  optimizer=Adam(learning_rate=0.0002),
+                  optimizer=Adam(learning_rate=lr_schedule),
                   metrics=[Recall(),
                            Precision(),
                            F1_Score()])
@@ -149,9 +155,11 @@ def train_cnn(epochs=1000, batch_size=32, val_frac=0.2,
 
     model = build_cnn()
 
-    ES = EarlyStopping(monitor='f1_score',
+    ES = EarlyStopping(monitor='val_f1_score',
                        patience=10,
-                       restore_best_weights=True)
+                       restore_best_weights=True,
+                       mode='max',
+                       verbose=1)
 
     history = model.fit(train_dataset, epochs=epochs, verbose=1,
                         validation_data=val_dataset, callbacks=[ES])
