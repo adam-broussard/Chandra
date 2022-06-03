@@ -32,7 +32,6 @@ def build_TL(finetune = False):
                             input_shape=(IMG_SIZE, IMG_SIZE, 3),
                             include_top=False)
     base_model.trainable = finetune
-    
     #Input shape = [width, height, color channels]
     inputs = Input(shape=(IMG_SIZE, IMG_SIZE, 3))
     x = base_model(inputs)
