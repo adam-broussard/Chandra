@@ -8,10 +8,13 @@ import pandas as pd
 from sklearn.model_selection import train_test_split
 # pylint: disable=[E0611,E0401]
 from tensorflow.keras.models import Sequential
+from tensorflow.keras.callbacks import EarlyStopping
 from tensorflow.keras.layers import (Dense, Dropout, Flatten, Conv2D,
                                      MaxPooling2D)
 from tensorflow.keras.losses import BinaryCrossentropy
 from tensorflow.keras.optimizers import Adam
+from ..metrics import F1_Score
+from tensorflow.keras.metrics import Recall, Precision
 import tensorflow as tf
 # pylint: enable-[E0611,E0401]
 
@@ -40,9 +43,10 @@ def build_cnn():
                         Dense(1, activation='sigmoid')])
 
     model.compile(loss=BinaryCrossentropy(),
-                  optimizer=Adam(),
-                  metrics=[tf.keras.metrics.Recall(),
-                           tf.keras.metrics.Precision()])
+                  optimizer=Adam(learning_rate=0.0002),
+                  metrics=[Recall(),
+                           Precision(),
+                           F1_Score()])
     return model
 
 
@@ -109,7 +113,14 @@ def create_dataset(filenames, is_pneumonia, shuffle=False, batch_size=32):
     return dataset
 
 
+<<<<<<< HEAD
 def get_tf_train_val(train_info_file_path, batch_size=128, val_frac=0.2):
+=======
+def train_cnn(epochs=1000, batch_size=32, val_frac=0.2,
+              train_info_file_path=(Path('data')
+                                    .joinpath('preprocessed',
+                                              'train_metadata.csv'))):
+>>>>>>> 35d088d (Added early stopping and F1 score)
     """
     Returns tensorflow dataset objects for training and validation.
 
@@ -169,7 +180,11 @@ def train_cnn(epochs=25, batch_size=32, val_frac=0.2,
 
     model = build_cnn()
 
+    ES = EarlyStopping(monitor='f1_score',
+                       patience=10,
+                       restore_best_weights=True)
+
     history = model.fit(train_dataset, epochs=epochs, verbose=1,
-                        validation_data=val_dataset)
+                        validation_data=val_dataset, callbacks=[ES])
 
     return history, model
