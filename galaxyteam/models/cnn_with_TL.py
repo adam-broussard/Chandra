@@ -1,5 +1,5 @@
 '''
-Holds functions for building, training, saving, and reading 
+Holds functions for building, training, saving, and reading
 Transfer Learning based convolutional neural network models.
 '''
 from pathlib import Path
@@ -96,4 +96,3 @@ def train_TL(finetune = False, epochs=10, batch_size=32, val_frac=0.2,
                         validation_data=val_dataset, callbacks=[ES])
 
     return history, model
-    
