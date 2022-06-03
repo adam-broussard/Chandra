@@ -46,4 +46,3 @@ class F1_Score(tf.keras.metrics.Metric):
         self.precision_fn.reset_states()
         self.recall_fn.reset_states()
         self.f1.assign(0)
-        
