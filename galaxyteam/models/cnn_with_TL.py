@@ -12,8 +12,9 @@ from tensorflow.keras.layers import (Dense, Dropout, Input, GlobalAveragePooling
 from tensorflow.keras.callbacks import EarlyStopping
 from tensorflow.keras.applications.resnet_v2 import ResNet152V2
 from tensorflow import keras
+# pylint: enable=[E0611,E0401]
 
-from galaxyteam.models.cnn import create_dataset
+from galaxyteam.models.cnn import create_dataset, get_tf_train_val
 from galaxyteam.metrics import F1_Score
 
 
@@ -70,20 +71,9 @@ def train_TL(finetune = False, epochs=10, batch_size=32, val_frac=0.2,
         model (Tensorflow.Model): The trained model
     """
 
-    full_train = pd.read_csv(train_info_file_path)
-
-    train_data, val_data = train_test_split(full_train, test_size=val_frac,
-                                            shuffle=True,
-                                            stratify=full_train.is_pneumonia,
-                                            random_state=9473)
-
-    # Create Tensorflow datasets
-    train_dataset = create_dataset(train_data.resized_file_path,
-                                   train_data.is_pneumonia,
-                                   batch_size=batch_size)
-    val_dataset = create_dataset(val_data.resized_file_path,
-                                 val_data.is_pneumonia,
-                                 batch_size=batch_size)
+    train_dataset, val_dataset = get_tf_train_val(train_info_file_path,
+                                                  val_frac=val_frac,
+                                                  batch_size=batch_size)
 
     model = build_TL(finetune)
 
