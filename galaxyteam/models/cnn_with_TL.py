@@ -10,6 +10,7 @@ from sklearn.model_selection import train_test_split
 from tensorflow.keras.metrics import Recall, Precision
 from tensorflow.keras.layers import (Dense, Dropout, Input, GlobalAveragePooling2D)
 from tensorflow.keras.callbacks import EarlyStopping
+from tensorflow.keras.optimizers.schedules import ExponentialDecay
 from tensorflow.keras.applications.resnet_v2 import ResNet152V2
 from tensorflow import keras
 # pylint: enable=[E0611,E0401]
@@ -45,8 +46,13 @@ def build_TL(finetune = False):
     model = keras.Model(inputs=[inputs], outputs=output)
     keras.backend.clear_session()
 
+    lr_schedule = ExponentialDecay(
+        0.0002,
+        decay_steps=30,
+        decay_rate=0.95)
+
     model.compile(loss='binary_crossentropy',
-                optimizer = keras.optimizers.Adam(),
+                optimizer = keras.optimizers.Adam(lr_schedule),
                 metrics=[Recall(),
                 Precision(),
                 F1_Score()])
@@ -77,9 +83,11 @@ def train_TL(finetune = False, epochs=10, batch_size=32, val_frac=0.2,
 
     model = build_TL(finetune)
 
-    ES = EarlyStopping(monitor='f1_score',
-                       patience=10,
-                       restore_best_weights=True)
+    ES = EarlyStopping(monitor='val_f1_score',
+                       patience=20,
+                       restore_best_weights=True,
+                       mode='max',
+                       verbose=1)
 
     history = model.fit(train_dataset, epochs=epochs, verbose=1,
                         validation_data=val_dataset, callbacks=[ES])
