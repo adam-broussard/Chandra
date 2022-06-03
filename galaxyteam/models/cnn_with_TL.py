@@ -3,9 +3,6 @@ Holds functions for building, training, saving, and reading
 Transfer Learning based convolutional neural network models.
 '''
 from pathlib import Path
-import pandas as pd
-
-from sklearn.model_selection import train_test_split
 # pylint: disable=[E0611,E0401]
 from tensorflow.keras.metrics import Recall, Precision
 from tensorflow.keras.layers import (Dense, Dropout, Input,
@@ -15,7 +12,7 @@ from tensorflow.keras.applications.resnet_v2 import ResNet152V2
 from tensorflow import keras
 # pylint: enable=[E0611,E0401]
 
-from galaxyteam.models.cnn import create_dataset, get_tf_train_val
+from galaxyteam.models.cnn import get_tf_train_val
 from galaxyteam.metrics import F1_Score
 
 
