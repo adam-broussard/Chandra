@@ -1,21 +1,19 @@
 '''
 Holds functions for building, training, saving, and reading Transfer Learning based convolutional neural network models.
 '''
-
 from pathlib import Path
 import pandas as pd
-from galaxyteam.models.cnn import create_dataset
-from galaxyteam.metrics import F1_Score
 
 from sklearn.model_selection import train_test_split
 # pylint: disable=[E0611,E0401]
 from tensorflow.keras.metrics import Recall, Precision
-from tensorflow.keras.layers import (Dense, Dropout, Input)
+from tensorflow.keras.layers import (Dense, Dropout, Input, GlobalAveragePooling2D)
 from tensorflow.keras.callbacks import EarlyStopping
 from tensorflow.keras.applications.resnet_v2 import ResNet152V2
-from tensorflow.keras.layers import Dense, GlobalAveragePooling2D
-import tensorflow.keras as keras
+from tensorflow import keras
 
+from galaxyteam.models.cnn import create_dataset
+from galaxyteam.metrics import F1_Score
 
 
 
@@ -27,7 +25,6 @@ def build_TL(finetune = False):
     '''
 
     IMG_SIZE = 224
-    
     ## We are using ResNet as out base model
     base_model = ResNet152V2(
         weights='imagenet',
@@ -38,9 +35,7 @@ def build_TL(finetune = False):
     
     #Input shape = [width, height, color channels]
     inputs = Input(shape=(IMG_SIZE, IMG_SIZE, 3))
-    
     x = base_model(inputs)
-
     # Head
     x = GlobalAveragePooling2D()(x)
     x = Dense(128, activation='relu')(x)
@@ -48,15 +43,14 @@ def build_TL(finetune = False):
     
     #Final Layer (Output)
     output = Dense(1, activation='sigmoid')(x)
-    
     model = keras.Model(inputs=[inputs], outputs=output)
     keras.backend.clear_session()
 
     model.compile(loss='binary_crossentropy',
-                            optimizer = keras.optimizers.Adam(),
-                            metrics=[Recall(),
-                            Precision(),
-                            F1_Score()])
+                optimizer = keras.optimizers.Adam(),
+                metrics=[Recall(),
+                Precision(),
+                F1_Score()])
     return model
 
 
@@ -103,4 +97,3 @@ def train_TL(finetune = False, epochs=10, batch_size=32, val_frac=0.2,
                         validation_data=val_dataset, callbacks=[ES])
 
     return history, model
-
