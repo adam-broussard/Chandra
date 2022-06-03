@@ -8,16 +8,12 @@ import pandas as pd
 from sklearn.model_selection import train_test_split
 # pylint: disable=[E0611,E0401]
 from tensorflow.keras.models import Sequential
-from tensorflow.keras.callbacks import EarlyStopping
 from tensorflow.keras.layers import (Dense, Dropout, Flatten, Conv2D,
                                      MaxPooling2D)
 from tensorflow.keras.losses import BinaryCrossentropy
 from tensorflow.keras.optimizers import Adam
-from tensorflow.keras.optimizers.schedules import ExponentialDecay
-from tensorflow.keras.metrics import Recall, Precision
 import tensorflow as tf
 # pylint: enable-[E0611,E0401]
-from ..metrics import F1_Score
 
 
 def build_cnn():
@@ -43,16 +39,10 @@ def build_cnn():
                         Dropout(0.5),
                         Dense(1, activation='sigmoid')])
 
-    lr_schedule = ExponentialDecay(
-        0.0002,
-        decay_steps=30,
-        decay_rate=0.95)
-
     model.compile(loss=BinaryCrossentropy(),
-                  optimizer=Adam(learning_rate=lr_schedule),
-                  metrics=[Recall(),
-                           Precision(),
-                           F1_Score()])
+                  optimizer=Adam(),
+                  metrics=[tf.keras.metrics.Recall(),
+                           tf.keras.metrics.Precision()])
     return model
 
 
@@ -119,7 +109,42 @@ def create_dataset(filenames, is_pneumonia, shuffle=False, batch_size=32):
     return dataset
 
 
-def train_cnn(epochs=1000, batch_size=32, val_frac=0.2,
+def get_tf_train_val(train_info_file_path, batch_size=128, val_frac=0.2):
+    """
+    Returns tensorflow dataset objects for training and validation.
+
+    Args:
+        train_info_file_path (pathlib.Path or string): Location of the training
+            metadata file
+        batch_size(int): Size of mini-batches used for training
+        val_frac (float): Fraction of the training set to use for validation
+
+    Returns:
+        train_dataset (tf.data.Dataset): A dataset containing the image and
+            pneumonia data for training
+        val_dataset (tf.data.Dataset): A dataset containing the image and
+            pneumonia data for validation
+    """
+
+    full_train = pd.read_csv(train_info_file_path)
+
+    train_data, val_data = train_test_split(full_train, test_size=val_frac,
+                                            shuffle=True,
+                                            stratify=full_train.is_pneumonia,
+                                            random_state=9473)
+
+    # Create Tensorflow datasets
+    train_dataset = create_dataset(train_data.resized_file_path,
+                                   train_data.is_pneumonia,
+                                   batch_size=batch_size)
+    val_dataset = create_dataset(val_data.resized_file_path,
+                                 val_data.is_pneumonia,
+                                 batch_size=batch_size)
+
+    return train_dataset, val_dataset
+
+
+def train_cnn(epochs=25, batch_size=32, val_frac=0.2,
               train_info_file_path=(Path('data')
                                     .joinpath('preprocessed',
                                               'train_metadata.csv'))):
@@ -138,30 +163,13 @@ def train_cnn(epochs=1000, batch_size=32, val_frac=0.2,
         model (Tensorflow.Model): The trained model
     """
 
-    full_train = pd.read_csv(train_info_file_path)
-
-    train_data, val_data = train_test_split(full_train, test_size=val_frac,
-                                            shuffle=True,
-                                            stratify=full_train.is_pneumonia,
-                                            random_state=9473)
-
-    # Create Tensorflow datasets
-    train_dataset = create_dataset(train_data.resized_file_path,
-                                   train_data.is_pneumonia,
-                                   batch_size=batch_size)
-    val_dataset = create_dataset(val_data.resized_file_path,
-                                 val_data.is_pneumonia,
-                                 batch_size=batch_size)
+    train_dataset, val_dataset = get_tf_train_val(train_info_file_path,
+                                                  batch_size=batch_size,
+                                                  val_frac=val_frac)
 
     model = build_cnn()
 
-    ES = EarlyStopping(monitor='val_f1_score',
-                       patience=20,
-                       restore_best_weights=True,
-                       mode='max',
-                       verbose=1)
-
     history = model.fit(train_dataset, epochs=epochs, verbose=1,
-                        validation_data=val_dataset, callbacks=[ES])
+                        validation_data=val_dataset)
 
     return history, model
