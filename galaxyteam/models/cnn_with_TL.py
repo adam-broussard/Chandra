@@ -1,5 +1,6 @@
 '''
-Holds functions for building, training, saving, and reading Transfer Learning based convolutional neural network models.
+Holds functions for building, training, saving, and reading 
+Transfer Learning based convolutional neural network models.
 '''
 from pathlib import Path
 import pandas as pd
@@ -27,10 +28,9 @@ def build_TL(finetune = False):
     IMG_SIZE = 224
     ## We are using ResNet as out base model
     base_model = ResNet152V2(
-        weights='imagenet',
-        input_shape=(IMG_SIZE, IMG_SIZE, 3),
-        include_top=False)
-
+                            weights='imagenet',
+                            input_shape=(IMG_SIZE, IMG_SIZE, 3),
+                            include_top=False)
     base_model.trainable = finetune
     
     #Input shape = [width, height, color channels]
@@ -40,7 +40,6 @@ def build_TL(finetune = False):
     x = GlobalAveragePooling2D()(x)
     x = Dense(128, activation='relu')(x)
     x = Dropout(0.1)(x)
-    
     #Final Layer (Output)
     output = Dense(1, activation='sigmoid')(x)
     model = keras.Model(inputs=[inputs], outputs=output)
@@ -97,3 +96,4 @@ def train_TL(finetune = False, epochs=10, batch_size=32, val_frac=0.2,
                         validation_data=val_dataset, callbacks=[ES])
 
     return history, model
+    
