@@ -4,8 +4,27 @@
 
 Chandra is a tool for classifying chest x-rays plates as exhibiting signs of pneumonia or not.  
 
+
+<!-- MarkdownTOC autolink="true" autoanchor="true" -->
+
+- [The Problem](#the-problem)
+- [Methodology](#methodology)
+    - [CNN Model Architecture and Training](#cnn-model-architecture-and-training)
+    - [TL Model Architecture and Training](#tl-model-architecture-and-training)
+- [Results](#results)
+- [Applications](#applications)
+- [Using the Code](#using-the-code)
+    - [Installation](#installation)
+    - [Usage](#usage)
+
+<!-- /MarkdownTOC -->
+
+
+
+<a id="the-problem"></a>
 ## The Problem
 
+<a id="methodology"></a>
 ## Methodology
 
 We have tested several machine-learning algorithms to arrive at our final model with varying levels of complexity.  The first is a _k_-Nearest Neighbors algorithm, which simply tries to classify an image based on how similar its particular pixel values are relative to the images in the training set.  The second is a convolutional neural network (CNN), which is capable of recognizing composite patterns and shapes in images.  The third is also a CNN, but it has been trained using the pretrained RESNET-152 v2 (with some added output dense layers) and hence, we refer to it as the Transfer Learning (TL) model.  RESNET-152 v2 is a residual deep network designed to have many layers without running aground of the vanishing gradient problem.
@@ -14,7 +33,37 @@ We use the F1 Score as our evaluation metric for two reasons.  The first is beca
 
 ![image](https://user-images.githubusercontent.com/33520634/172018513-edc20ed9-869c-41d4-a235-2ab3a981d295.png)
 
-## Installation
+<a id="cnn-model-architecture-and-training"></a>
+### CNN Model Architecture and Training
+
+<a id="tl-model-architecture-and-training"></a>
+### TL Model Architecture and Training
+
+<a id="results"></a>
+## Results
+
+| Model  | F1 Score |
+|:------:|---------:|
+| _k_-NN | 0.0947   |
+| CNN    | 0.970    |
+| TL     | 0.000    |
+
+In the table above, we show the F1 Score for each of our models after training.  The CNN shows the best F1 score and, as a result, we choose it as our best-fit model.  We also examine the confusion matrices for each of the models below, where we find that the CNN model particularly shines at avoiding misclassifications of normal x-rays as containing pneumonia.
+
+< IMAGE >
+
+Because our CNN model is the chosen best-fit model, we then make a final estimate of its performance on data it has never seen before by applying it to the test set, yielding an F1 Score of **0.966** and the following confusion matrix:
+
+< IMAGE >
+
+<a id="applications"></a>
+## Applications
+
+<a id="using-the-code"></a>
+## Using the Code
+
+<a id="installation"></a>
+### Installation
 
 You can install from source by running:
 
@@ -25,7 +74,8 @@ python setup.py build
 python setup.py install [--user]
 ```
 
-## Usage
+<a id="usage"></a>
+### Usage
 Once you have it installed, to do anything you'll need some data files which actually contain the X-ray scans. You can download them using:
 ```
 >> from galaxyteam import dataset
