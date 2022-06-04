@@ -73,9 +73,10 @@ def train_TL(finetune=False, epochs=10, batch_size=32, val_frac=0.2,
 
     model = build_TL(finetune)
 
-    ES = EarlyStopping(monitor='f1_score',
+    ES = EarlyStopping(monitor='val_f1_score',
                        patience=10,
-                       restore_best_weights=True)
+                       restore_best_weights=True,
+                       mode='max')
 
     history = model.fit(train_dataset, epochs=epochs, verbose=1,
                         validation_data=val_dataset, callbacks=[ES])
