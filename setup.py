@@ -8,7 +8,7 @@ def read(fname):
 
 
 setup(
-    name='galaxyteam',
+    name='chandra',
     version='0.0.1',
     description=('Data operations and example analyses for working with the'
                  + 'Kaggle Chest X-ray dataset at https://www.kaggle.com/'
@@ -18,7 +18,7 @@ setup(
     author='Adam Broussard and Anthony Young',
     author_email='adamcbroussard@gmail.com',
     license='GNU GPLv3',
-    packages=['galaxyteam'],
+    packages=['chandra'],
     install_requires=['numpy',
                       'scipy',
                       'kaggle',
