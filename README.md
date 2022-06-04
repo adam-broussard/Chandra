@@ -42,7 +42,7 @@ Our CNN model consists of the following layers:
  - 2D Convolution (64 3x3 filters, ReLU activation)
  - 2D Max Pooling (4x4)
  - 2D Convolution (64 3x3 filters, ReLU activation)
- - 2D Max Pooliing (4x4)
+ - 2D Max Pooling (4x4)
  - Dense (64 neurons, ReLU activation)
  - Dropout (Probability=0.5)
  - Dense (16, ReLU activation)
