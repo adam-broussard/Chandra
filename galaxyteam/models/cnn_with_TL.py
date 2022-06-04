@@ -40,7 +40,6 @@ def build_TL(finetune=False):
     # Final Layer (Output)
     output = Dense(1, activation='sigmoid')(x)
     model = keras.Model(inputs=[inputs], outputs=output)
-    keras.backend.clear_session()
 
     model.compile(loss='binary_crossentropy',
                   optimizer=keras.optimizers.Adam(),
