@@ -120,13 +120,19 @@ def create_dataset(filenames, is_pneumonia, shuffle=False, batch_size=32):
 
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 def get_tf_train_val(train_info_file_path, batch_size=128, val_frac=0.2):
 =======
+=======
+>>>>>>> 1f85a61cfcf5064e03c5ad1b5169240b8dd9a2cb
 def train_cnn(epochs=1000, batch_size=32, val_frac=0.2,
               train_info_file_path=(Path('data')
                                     .joinpath('preprocessed',
                                               'train_metadata.csv'))):
+<<<<<<< HEAD
 >>>>>>> 35d088d (Added early stopping and F1 score)
+=======
+>>>>>>> 1f85a61cfcf5064e03c5ad1b5169240b8dd9a2cb
     """
     Returns tensorflow dataset objects for training and validation.
 
