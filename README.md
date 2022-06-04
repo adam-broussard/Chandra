@@ -12,7 +12,7 @@ We have tested several machine-learning algorithms to arrive at our final model 
 
 We use the F1 Score as our evaluation metric for two reasons.  The first is because we want as few true cases of pneumonia to be misclassified by our models as possible (which can be gauged by the Recall/Sensitivity).  On the other hand, if this is to be a tool that allows radiologists to work much more efficiently by not needing to look at x-rays the model confidently classifies as normal, we want as few normal x-rays to be classified as pneumonia as possible (which can be measured using Precision).  Because the F1 Score balances these two metrics (while effectively providing more weight to the lower of the two), it provides an optimal measure of our model performance.
 
-![image](https://user-images.githubusercontent.com/33520634/172018441-5cc1b8a7-afb0-4465-a62f-b3eb18812090.png)
+![image](https://user-images.githubusercontent.com/33520634/172018513-edc20ed9-869c-41d4-a235-2ab3a981d295.png)
 
 ## Installation
 
