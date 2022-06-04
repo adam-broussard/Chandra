@@ -21,7 +21,7 @@ class F1_Score(tf.keras.metrics.Metric):
         self.precision_fn = Precision(thresholds=0.5)
         self.recall_fn = Recall(thresholds=0.5)
 
-    def update_state(self, y_true, y_pred):
+    def update_state(self, y_true, y_pred, sample_weight=None):
         """
         Update the object state
 
