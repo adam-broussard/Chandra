@@ -6,4 +6,4 @@ from . import cnn
 
 
 __version__ = "0.0.1"
-__author__ = 'Adam Broussard and Anthony Young'
+__author__ = 'Adam Broussard, Shreeya Behera, Karthik Prabhu'

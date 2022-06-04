@@ -12,8 +12,8 @@ from tensorflow.keras.applications.resnet_v2 import ResNet152V2
 from tensorflow import keras
 # pylint: enable=[E0611,E0401]
 
-from galaxyteam.models.cnn import get_tf_train_val
-from galaxyteam.metrics import F1_Score
+from .cnn import get_tf_train_val
+from ..metrics import F1_Score
 
 
 def build_TL(finetune=False):
