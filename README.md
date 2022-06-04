@@ -44,17 +44,19 @@ We use the F1 Score as our evaluation metric for two reasons.  The first is beca
 
 | Model  | F1 Score |
 |:------:|---------:|
-| _k_-NN | 0.0947   |
+| _k_-NN | 0.947    |
 | CNN    | 0.970    |
 | TL     | 0.000    |
 
 In the table above, we show the F1 Score for each of our models after training.  The CNN shows the best F1 score and, as a result, we choose it as our best-fit model.  We also examine the confusion matrices for each of the models below, where we find that the CNN model particularly shines at avoiding misclassifications of normal x-rays as containing pneumonia.
 
-< IMAGE >
+![image](https://user-images.githubusercontent.com/33520634/172019831-d0b753b9-6f54-43b9-8e1b-80d8b0475123.png)
 
-Because our CNN model is the chosen best-fit model, we then make a final estimate of its performance on data it has never seen before by applying it to the test set, yielding an F1 Score of **0.966** and the following confusion matrix:
 
-< IMAGE >
+Because our CNN model is the chosen best-fit model, we then make a final estimate of its performance on data it has never seen before by applying it to the test set, yielding an F1 Score of **0.966** and the following final confusion matrix:
+
+![image](https://user-images.githubusercontent.com/33520634/172019861-c2235abd-9124-452c-b26e-59b3be210a40.png)
+
 
 <a id="applications"></a>
 ## Applications
